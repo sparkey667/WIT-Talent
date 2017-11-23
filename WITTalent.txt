@@ -1,0 +1,188 @@
+DROP TABLE IF EXISTS Advertising;
+DROP TABLE IF EXISTS socialMedia;
+DROP TABLE IF EXISTS Merchandise;
+DROP TABLE IF EXISTS Promotion;
+DROP TABLE IF EXISTS Schedule;
+DROP TABLE IF EXISTS venue;
+DROP TABLE IF EXISTS Bonus;
+DROP TABLE IF EXISTS concertList;
+DROP TABLE IF EXISTS Opener;
+DROP TABLE IF EXISTS Tour;
+DROP TABLE IF EXISTS Contract;
+DROP TABLE IF EXISTS Manager;
+DROP TABLE IF EXISTS Instrument;
+DROP TABLE IF EXISTS Member;
+DROP TABLE IF EXISTS Act;
+CREATE TABLE Act
+(
+	Act_ID	varchar(5) NOT NULL,
+	Name	varchar(25),
+	Genre	varchar(15),
+	Manager_ID	varchar(5),
+	CONSTRAINT ACT_PK PRIMARY KEY(ACT_ID),
+	CONSTRAINT ACT_FK FOREIGN KEY(Manager_ID) REFERENCES Manager(Manager_ID) 
+);
+CREATE TABLE Member
+(
+	Member_ID	varchar(5)	NOT NULL,
+	ACT_ID		varchar(5)	NOT NULL,
+	fName		varchar(15),
+	lName		varchar(15),
+	age		varchar(3),
+	Instrument_ID	varchar(5)	NOT NULL,
+	phoneNumber	varchar(15),
+	CONSTRAINT Member_PK PRIMARY KEY(Member_ID),
+	CONSTRAINT Member_FK1 FOREIGN KEY(ACT_ID) REFERENCES Act(Act_ID),
+	CONSTRAINT Member_FK2 FOREIGN KEY(Instrument_ID) REFERENCES Instrument(Instrument_ID)
+);
+CREATE TABLE Instrument
+(
+	Instrument_ID	varchar(5)	NOT NULL,
+	firstInstrument	varchar(10)	NOT NULL,
+	secondInstrument varchar(10),
+	thirdInstrument	varchar(10),
+	fourthInstrument varchar(10),
+	CONSTRAINT Instrument_PK PRIMARY KEY(Instrument_ID)
+);
+CREATE TABLE Manager
+(
+	Manager_ID	varchar(5)	NOT NULL,
+	fName		varchar(15),
+	lName		varchar(15),
+	Type		varchar(15),
+	Experience	INT,
+	PhoneNumber	varchar(15),
+	CONSTRAINT Manager_PK PRIMARY KEY(Manager_ID)
+);
+CREATE TABLE Contract
+(
+	Contract_ID	varchar(5)	NOT NULL,
+	Annual_Salary		INT,
+	Lease			INT,
+	Act_ID		varchar(5),
+	Manager_ID	varchar(5),
+	Tour_ID		varchar(5),
+	Bonus_ID	varchar(5),
+	CONSTRAINT Contract_PK PRIMARY KEY(Contract_ID),
+	CONSTRAINT Contract_FK1 FOREIGN KEY(Act_ID) REFERENCES Act(Act_ID),
+	CONSTRAINT Contract_FK2 FOREIGN KEY(Manager_ID) REFERENCES Manager(Manager_ID),
+	CONSTRAINT Contract_FK3 FOREIGN KEY(Tour_ID) REFERENCES Tour(Tour_ID),
+	CONSTRAINT Contract_FK4 FOREIGN KEY(Bonus_ID) REFERENCES Bonus(Bonus_ID)
+);
+CREATE TABLE Tour
+(
+	Tour_ID		varchar(5)	NOT NULL,
+	Name		varchar(20),
+	concertList_ID		varchar(5)	NOT NULL,
+	Length		INT		NOT NULL,
+	Act_ID		varchar(5)	NOT NULL,
+	Opener_ID	varchar(5)	NOT NULL,		
+	CONSTRAINT Tour_PK PRIMARY KEY(Tour_ID),
+	CONSTRAINT Tour_FK1 FOREIGN KEY(concertList_ID) References concertList(concertList_ID),
+	CONSTRAINT Tour_FK2 FOREIGN KEY(Act_ID) References Act(Act_ID),
+	CONSTRAINT Tour_FK3 FOREIGN KEY(Opener_ID) References Opener(Opener_ID)
+);
+CREATE TABLE Opener
+(
+	Opener_ID	varchar(5)	NOT NULL,
+	Opener1		varchar(5)	NOT NULL,
+	Opener2		varchar(5)	NOT NULL,
+	CONSTRAINT Opener_PK PRIMARY KEY(Opener_ID),
+	CONSTRAINT Opener_FK1 FOREIGN KEY(Opener1) REFERENCES Act(Act_ID),
+	CONSTRAINT Opener_FK2 FOREIGN KEY(Opener2) REFERENCES Act(Act_ID)
+);
+CREATE TABLE concertList
+(
+	concertList_ID	varchar(5)	NOT NULL,
+	concert1	varchar(5),
+	concert2	varchar(5),
+	concert3	varchar(5),
+	concert4	varchar(5),
+	concert5	varchar(5),
+	concert6	varchar(5),
+	concert7	varchar(5),
+	concert8	varchar(5),
+	concert9	varchar(5),
+	concert10	varchar(5),
+	CONSTRAINT concertList_PK PRIMARY KEY(concertList_ID),
+	CONSTRAINT concertList_FK1 FOREIGN KEY(Concert1) REFERENCES Venue(Venue_ID),
+	CONSTRAINT concertList_FK2 FOREIGN KEY(Concert2) REFERENCES Venue(Venue_ID),
+	CONSTRAINT concertList_FK3 FOREIGN KEY(Concert3) REFERENCES Venue(Venue_ID),
+	CONSTRAINT concertList_FK4 FOREIGN KEY(Concert4) REFERENCES Venue(Venue_ID),
+	CONSTRAINT concertList_FK5 FOREIGN KEY(Concert5) REFERENCES Venue(Venue_ID),
+	CONSTRAINT concertList_FK6 FOREIGN KEY(Concert6) REFERENCES Venue(Venue_ID),
+	CONSTRAINT concertList_FK7 FOREIGN KEY(Concert7) REFERENCES Venue(Venue_ID),
+	CONSTRAINT concertList_FK8 FOREIGN KEY(Concert8) REFERENCES Venue(Venue_ID),
+	CONSTRAINT concertList_FK9 FOREIGN KEY(Concert9) REFERENCES Venue(Venue_ID),
+	CONSTRAINT concertList_FK10 FOREIGN KEY(Concert10) REFERENCES Venue(Venue_ID)
+);
+CREATE TABLE Bonus
+(
+	Bonus_ID	varchar(5)	NOT NULL,
+	Lodging		varchar(35),
+	Food		varchar(35),
+	Transportation	varchar(35),
+	CONSTRAINT Bonus_PK Primary Key(Bonus_ID)
+);
+CREATE TABLE Venue
+(
+	Venue_ID	varchar(5)	NOT NULL,
+	Name		varchar(25),
+	Street		varchar(20),
+	City		varchar(20),
+	State		varchar(2),
+	zipCode		varchar(10),
+	size		Int,
+	Type		varchar(20),
+	CONSTRAINT Venue_PK PRIMARY KEY(Venue_ID)
+);
+CREATE TABLE Schedule
+(
+	Schedule_ID	varchar(5)	NOT NULL,
+	Venue_ID	varchar(5)	NOT NULL,
+	DATE		varchar(20)	NOT NULL,
+	Time		varchar(10)	NOT NULL,
+	CONSTRAINT Schedule_PK PRIMARY KEY(Schedule_ID),
+	CONSTRAINT Schedule_FK FOREIGN KEY(Venue_ID) REFERENCES Venue(Venue_ID)
+);
+CREATE TABLE Promotion
+(	
+	Promotion_ID	varchar(5)	NOT NULL,
+	Budget		INT		NOT NULL,
+	Tour_ID		varchar(5),
+	Act_ID		varchar(5),
+	CONSTRAINT Promotion_PK PRIMARY KEY(Promotion_ID),
+	CONSTRAINT Promotion_FK2 FOREIGN KEY(Tour_ID) REFERENCES Tour(Tour_ID),
+	CONSTRAINT Promotion_FK3 FOREIGN KEY(Act_ID) REFERENCES Act(Act_ID)
+);
+CREATE TABLE Merchandise
+(
+	M_Promotion_ID	varchar(5)	NOT NULL,
+	Item		varchar(20),
+	Price		INT,
+	QTY		INT,
+	TotalCost	INT,
+	CONSTRAINT Marchandise_FK FOREIGN KEY(M_Promotion_ID) REFERENCES Promotion(Promotion_ID)
+);
+CREATE TABLE socialMedia
+(
+	S_Promotion_ID	varchar(5)	NOT NULL,
+	Account		varchar(10),
+	Followers	INT,
+	Username	varchar(25),
+	Password	varchar(15),
+	CONSTRAINT socialMedia_FK FOREIGN KEY(S_Promotion_ID) REFERENCES Promotion(Promotion_ID)
+);
+CREATE TABLE Advertising
+(
+	A_Promotion_ID  	varchar(5)	NOT NULL,
+	Promotion		INT,
+	Price			INT,
+	QTY			INT,
+	TotalCost		INT,
+	CONSTRAINT Advertising_FK FOREIGN KEY(A_Promotion_ID) REFERENCES Promotion(Promotion_ID)
+);
+	
+	
+	
+	

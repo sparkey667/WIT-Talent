@@ -1,0 +1,68 @@
+Simple Queries
+1.)Display all of the members and their age:
+Select fName, lName, Age 
+From `Member`;
+
+2.)Display Venues that hold over 10,000 people:
+Select Name 
+From `Venue` 
+Where `Size` > 10000
+
+3.)Display Merchandise that costs more than $5 along with the price:
+Select Item, Price 
+from Merchandise 
+Where `Price`  > 5
+
+4.)Display Artists that are vocalists only:
+Select fName, lName 
+from member 
+where Instrument_ID = 'I0001'
+
+5.)Display Venues that has "city" in the City name:
+Select Name, Street, City, State
+From Venue 
+Where City LIKE '%City'
+
+
+Intermediate Queries
+
+For each manager, find the number of acts each one has
+
+SELECT Manager_ID, Count(Act_ID) As Acts
+FROM ACT
+GROUP BY Manager_ID
+ORDER BY Manager_ID;
+
+Find the total budget for each tour
+
+SELECT Tour_ID, sum(Budget) as total_budget
+FROM promotion
+GROUP BY Tour_ID;
+
+Find venue that is scheduled at 1 AM
+
+SELECT Venue_ID, Name
+FROM venue
+Where Venue_ID = 
+	(SELECT Venue_ID
+     FROM schedule
+     WHERE Time = '1:00 AM');
+
+
+Complex Queries
+List all the acts that head a tour (not openers)
+SELECT h.Act_ID, Name
+FROM Act h, tour n
+WHERE h.Act_ID = n.ACT_ID;
+
+Find the nnumber of members in the act with the Act_ID A0001
+SELECT a.Act_ID, Name, COUNT(m.Act_ID) AS count
+FROM Act a, Member m
+WHERE a.Act_ID = m.Act_ID AND m.Act_ID = 'A0001'
+
+Find all the venues that are booked in January
+SELECT v.Venue_ID, Name
+FROM Venue v, Schedule s
+WHERE v.Venue_ID = s.Venue_ID AND s.DATE BETWEEN '2017-01-01' AND '2017-02-01';
+
+
